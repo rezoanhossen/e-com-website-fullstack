@@ -1,0 +1,168 @@
+/* ===== PAGE BASE ===== */
+.admin-container {
+  padding: 40px;
+  background: #f6f7fb;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== HEADER ===== */
+.admin-header {
+  margin-bottom: 30px;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.admin-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* ===== TABS ===== */
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.tab-button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid #e2e2e2;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.tab-button:hover {
+  background: #f0f0f0;
+}
+
+.tab-button.active {
+  background: #111;
+  color: white;
+  border-color: #111;
+}
+
+/* ===== LAYOUT ===== */
+.admin-content {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 30px;
+}
+
+/* ===== CARDS ===== */
+.admin-form-section,
+.admin-list-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* ===== FORM ===== */
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus {
+  border-color: #111;
+  outline: none;
+}
+
+/* ===== BUTTON ===== */
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #333;
+}
+
+/* ===== LIST TABLE STYLE ===== */
+.products-table,
+.coupons-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-row,
+.coupon-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  transition: 0.2s ease;
+}
+
+.product-row:hover,
+.coupon-row:hover {
+  background: #fafafa;
+}
+
+.product-info h4,
+.coupon-info h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.product-info p,
+.coupon-info p {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: #777;
+}
+
+/* ===== DELETE BUTTON ===== */
+.delete-btn {
+  background: #ff4d4f;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #e63946;
+}
+
+/* ===== BADGE ===== */
+.one-time-badge {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1000px) {
+  .admin-content {
+    grid-template-columns: 1fr;
+  }
+}
