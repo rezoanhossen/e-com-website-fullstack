@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: "https://e-com-backend-jlqg.onrender.com"
+  baseURL: "https://e-com-backend-jlqg.onrender.com/api"
 });
 
 
