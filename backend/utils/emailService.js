@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+console.log("Email service file loaded");
 
 // Configure email transporter
 const transporter = nodemailer.createTransport({
