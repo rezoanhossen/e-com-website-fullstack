@@ -6,18 +6,20 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
+    pass: process.env.EMAIL_PASSWORD,
   }
 });
 
 // Verify transporter connection on startup
-transporter.verify(function(error, success) {
+transporter.verify((error, success) => {
   if (error) {
-    console.error('Email transporter verification failed:', error.message);
+    console.error("❌ Email transporter verification failed:");
+    console.error(error);
   } else {
-    console.log('Email transporter is ready to send messages');
+    console.log("✅ Email transporter is ready to send messages");
   }
 });
+
 
 // Send verification email
 const sendVerificationEmail = async (email, verificationToken) => {
