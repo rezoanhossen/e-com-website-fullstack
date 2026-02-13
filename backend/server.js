@@ -8,7 +8,7 @@ const couponRoutes = require('./routes/coupons');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 const paymentRoutes = require('./routes/payments');
-require('./utils/emailService')
+require('./utils/emailService');
 const app = express();
 
 // Middleware
