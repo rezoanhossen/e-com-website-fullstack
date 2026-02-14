@@ -6,6 +6,11 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  orderNumber: {
+    type: String,
+    unique: true,
+    required: true
+  },
   items: [{
     productId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,13 +20,33 @@ const orderSchema = new mongoose.Schema({
     productName: String,
     quantity: {
       type: Number,
-      required: true
+      required: true,
+      min: 1
     },
     price: {
       type: Number,
       required: true
-    }
+    },
+    size: String,
+    color: String,
+    image: String
   }],
+  subtotal: {
+    type: Number,
+    required: true
+  },
+  tax: {
+    type: Number,
+    default: 0
+  },
+  shippingCost: {
+    type: Number,
+    default: 0
+  },
+  discount: {
+    type: Number,
+    default: 0
+  },
   totalPrice: {
     type: Number,
     required: true
@@ -32,33 +57,44 @@ const orderSchema = new mongoose.Schema({
     phone: String,
     address: String,
     city: String,
+    state: String,
     zipCode: String,
     country: String
   },
+  deliveryMethod: {
+    type: String,
+    enum: ['standard', 'express', 'overnight'],
+    default: 'standard'
+  },
   paymentMethod: {
     type: String,
-    enum: ['upi', 'google-pay', 'phonepe', 'paytm', 'bhim', 'credit-card', 'debit-card', 'paypal', 'bank-transfer'],
+    enum: ['credit-card', 'debit-card', 'stripe', 'paypal', 'cod'],
     required: true
   },
-  // Payment tracking fields for PhonePe
   paymentStatus: {
     type: String,
-    enum: ['pending', 'initiated', 'success', 'failed', 'refunded'],
+    enum: ['pending', 'completed', 'failed', 'refunded'],
     default: 'pending'
   },
-  phonpeTransactionId: String,
-  phonpePaymentId: String,
+  stripePaymentId: String,
+  stripeChargeId: String,
   transactionId: String,
   
   status: {
     type: String,
-    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'returned'],
     default: 'pending'
   },
+  
   appliedCoupon: {
     couponId: mongoose.Schema.Types.ObjectId,
+    code: String,
     discount: Number
   },
+  
+  notes: String,
+  trackingNumber: String,
+  
   createdAt: {
     type: Date,
     default: Date.now
@@ -67,6 +103,15 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Auto-generate order number
+orderSchema.pre('save', async function(next) {
+  if (!this.orderNumber) {
+    const count = await mongoose.model('Order').countDocuments();
+    this.orderNumber = `ORD-${Date.now()}-${count + 1}`;
+  }
+  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);

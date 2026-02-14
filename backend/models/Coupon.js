@@ -4,25 +4,51 @@ const couponSchema = new mongoose.Schema({
   code: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    uppercase: true,
+    trim: true
   },
-  discountPercentage: {
+  description: {
+    type: String,
+    default: null
+  },
+  discountType: {
+    type: String,
+    enum: ['percentage', 'fixed'],
+    default: 'percentage'
+  },
+  discountValue: {
     type: Number,
-    required: true
+    required: true,
+    min: 0
+  },
+  minPurchaseAmount: {
+    type: Number,
+    default: 0
+  },
+  maxUses: {
+    type: Number,
+    default: null
+  },
+  usageCount: {
+    type: Number,
+    default: 0
+  },
+  maxUsesPerUser: {
+    type: Number,
+    default: 1
   },
   expiryDate: {
     type: Date,
     required: true
   },
-  active: {
+  isActive: {
     type: Boolean,
     default: true
   },
-  isOneTimePerUser: {
-    type: Boolean,
-    default: false,
-    description: 'If true, coupon can only be used once per user'
-  },
+  applicableCategories: [{
+    type: String
+  }],
   usedByUsers: [
     {
       userId: {
@@ -36,6 +62,10 @@ const couponSchema = new mongoose.Schema({
     }
   ],
   createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
     type: Date,
     default: Date.now
   }

@@ -258,3 +258,180 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, phone, preferences } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (name) user.name = name;
+    if (phone) user.phone = phone;
+    if (preferences) {
+      user.preferences = { ...user.preferences, ...preferences };
+    }
+    user.updatedAt = Date.now();
+
+    await user.save();
+    res.json({ message: 'Profile updated successfully', user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Address management
+exports.addAddress = async (req, res) => {
+  try {
+    const { fullName, phone, address, city, state, zipCode, country, isDefault } = req.body;
+    const user = await User.findById(req.user.id);
+
+    const newAddress = {
+      _id: new require('mongoose').Types.ObjectId(),
+      fullName,
+      phone,
+      address,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault: isDefault || false
+    };
+
+    // If this is the default, unset other defaults
+    if (isDefault) {
+      user.addresses.forEach(addr => addr.isDefault = false);
+    }
+
+    user.addresses.push(newAddress);
+    await user.save();
+
+    res.status(201).json({ message: 'Address added successfully', address: newAddress });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    const { fullName, phone, address, city, state, zipCode, country, isDefault } = req.body;
+    const user = await User.findById(req.user.id);
+
+    const addressIndex = user.addresses.findIndex(a => a._id.toString() === addressId);
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: 'Address not found' });
+    }
+
+    if (isDefault) {
+      user.addresses.forEach(addr => addr.isDefault = false);
+    }
+
+    user.addresses[addressIndex] = {
+      ...user.addresses[addressIndex],
+      fullName: fullName || user.addresses[addressIndex].fullName,
+      phone: phone || user.addresses[addressIndex].phone,
+      address: address || user.addresses[addressIndex].address,
+      city: city || user.addresses[addressIndex].city,
+      state: state || user.addresses[addressIndex].state,
+      zipCode: zipCode || user.addresses[addressIndex].zipCode,
+      country: country || user.addresses[addressIndex].country,
+      isDefault: isDefault !== undefined ? isDefault : user.addresses[addressIndex].isDefault
+    };
+
+    await user.save();
+    res.json({ message: 'Address updated successfully', address: user.addresses[addressIndex] });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    const user = await User.findById(req.user.id);
+
+    user.addresses = user.addresses.filter(a => a._id.toString() !== addressId);
+    await user.save();
+
+    res.json({ message: 'Address deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Wishlist management
+exports.addToWishlist = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const user = await User.findById(req.user.id);
+
+    if (user.wishlist.includes(productId)) {
+      return res.status(400).json({ message: 'Product already in wishlist' });
+    }
+
+    user.wishlist.push(productId);
+    await user.save();
+
+    res.json({ message: 'Added to wishlist' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.removeFromWishlist = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const user = await User.findById(req.user.id);
+
+    user.wishlist = user.wishlist.filter(id => id.toString() !== productId);
+    await user.save();
+
+    res.json({ message: 'Removed from wishlist' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getWishlist = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate('wishlist');
+    res.json(user.wishlist);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Recently viewed products
+exports.addToRecentlyViewed = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const user = await User.findById(req.user.id);
+
+    // Remove if already exists
+    user.recentlyViewed = user.recentlyViewed.filter(r => r.productId.toString() !== productId);
+
+    // Add to beginning with current date
+    user.recentlyViewed.unshift({
+      productId,
+      viewedAt: Date.now()
+    });
+
+    // Keep only last 20 viewed products
+    if (user.recentlyViewed.length > 20) {
+      user.recentlyViewed = user.recentlyViewed.slice(0, 20);
+    }
+
+    await user.save();
+    res.json({ message: 'Added to recently viewed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getRecentlyViewed = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate('recentlyViewed.productId');
+    res.json(user.recentlyViewed);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

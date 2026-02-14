@@ -7,13 +7,16 @@ const { authMiddleware, adminMiddleware } = require('../middleware/auth');
 router.use(authMiddleware);
 
 // User routes
-router.post('/', orderController.createOrder);
 router.get('/', orderController.getUserOrders);
+router.get('/summary', orderController.getOrderSummary);
 router.get('/:id', orderController.getOrder);
-router.delete('/:id/cancel', orderController.cancelOrder);
+router.post('/:id/cancel', orderController.cancelOrder);
+router.post('/:id/return', orderController.returnOrder);
 
 // Admin routes
-router.get('/all', adminMiddleware, orderController.getAllOrders);
+router.get('/admin/all', adminMiddleware, orderController.getAllOrders);
+router.get('/admin/stats', adminMiddleware, orderController.getDashboardStats);
 router.put('/:id/status', adminMiddleware, orderController.updateOrderStatus);
+router.put('/:id/payment-status', adminMiddleware, orderController.updatePaymentStatus);
 
 module.exports = router;

@@ -49,9 +49,10 @@ export default function Home() {
   const fetchProducts = async () => {
     try {
       const response = await productAPI.getProducts();
-      setProducts(response.data);
+      setProducts(response.data.products || []);
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -135,9 +136,13 @@ export default function Home() {
               const reviews = Math.floor(Math.random() * 5000) + 100;
 
               return (
-                <div key={product._id} className="product-card-amazon">
+                <div 
+                  key={product._id} 
+                  className="product-card-amazon cursor-pointer hover:shadow-2xl transition-shadow duration-300"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                >
                   <div className="product-card-image">
-                    <img src={product.image} alt={product.name} />
+                    <img src={product.image || product.images?.[0]} alt={product.name} />
                     {product.stock === 0 && <div className="out-of-stock-badge">Out of Stock</div>}
                     {discount > 0 && <div className="discount-badge">-{discount}%</div>}
                     {product.stock > 50 && <div className="deal-badge">Prime Eligible</div>}

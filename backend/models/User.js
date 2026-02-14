@@ -4,16 +4,23 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true,
+    trim: true
   },
   password: {
     type: String,
     required: true
+  },
+  phone: {
+    type: String,
+    default: null
   },
   isAdmin: {
     type: Boolean,
@@ -39,7 +46,61 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+  addresses: [{
+    _id: mongoose.Schema.Types.ObjectId,
+    fullName: String,
+    phone: String,
+    address: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String,
+    isDefault: {
+      type: Boolean,
+      default: false
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  wishlist: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
+  }],
+  recentlyViewed: [{
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    },
+    viewedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  newsletter: {
+    type: Boolean,
+    default: true
+  },
+  preferences: {
+    currency: {
+      type: String,
+      default: 'USD'
+    },
+    language: {
+      type: String,
+      default: 'en'
+    },
+    darkMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
     type: Date,
     default: Date.now
   }

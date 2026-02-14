@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: "https://e-com-backend-jlqg.onrender.com/api"
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api"
 });
 
 
@@ -22,6 +22,7 @@ export const authAPI = {
 export const productAPI = {
   getProducts: () => API.get('/products'),
   getProduct: (id) => API.get(`/products/${id}`),
+  getRelatedProducts: (id) => API.get(`/products/related/${id}`),
   createProduct: (data) => API.post('/products', data),
   updateProduct: (id, data) => API.put(`/products/${id}`, data),
   deleteProduct: (id) => API.delete(`/products/${id}`)
