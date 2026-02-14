@@ -22,49 +22,57 @@
 }
 
 /* ========== HERO SECTION ========== */
-.hero-banner-container {
-  width: 100%;
-}
-
 .hero-banner {
-  padding: 120px 20px;
-  background: linear-gradient(to right, #000000, #1c1c1c);
+  padding: 140px 20px;
+  background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.65),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url("https://images.unsplash.com/photo-1441986300917-64674bd600d8");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   text-align: center;
+  position: relative;
 }
-
-.hero-content {
-  max-width: 1200px;
-  margin: auto;
-}
-
 .hero-banner h1 {
-  font-size: 56px;
-  font-weight: 700;
-  letter-spacing: 3px;
+  font-size: 60px;
+  font-weight: 800;
+  letter-spacing: 2px;
   margin-bottom: 20px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
-
 .hero-banner p {
-  font-size: 18px;
-  opacity: 0.8;
-  margin-bottom: 30px;
+  font-size: 20px;
+  opacity: 0.95;
+  margin-bottom: 40px;
 }
-
 .hero-cta {
   background: var(--accent);
   color: black;
   border: none;
-  padding: 14px 40px;
-  border-radius: 40px;
-  font-weight: 600;
+  padding: 16px 45px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(212,175,55,0.4);
 }
 
 .hero-cta:hover {
   background: white;
+  transform: translateY(-4px);
 }
+.deals-section {
+  max-width: 1300px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
 
 /* ========== SECTION HEADER ========== */
 .deals-section {
@@ -302,20 +310,30 @@
 
 /* ========== FOOTER BANNER ========== */
 .footer-banner {
-  background: black;
+  position: relative;
+  width: 100vw;              /* Force full viewport width */
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;        /* Center fix */
+  margin-right: -50vw;
+  background: rgb(255, 255, 255);
   color: white;
   padding: 60px 20px;
   text-align: center;
   margin-top: 80px;
 }
-
-.footer-banner-content h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
+.footer-banner h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
-
-.footer-banner-content p {
-  opacity: 0.7;
+.footer-banner p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+body {
+  margin: 0;
+  padding: 0;
 }
 
 /* ========== LOADING / EMPTY ========== */
